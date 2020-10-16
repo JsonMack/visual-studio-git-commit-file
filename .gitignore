@@ -1,0 +1,7 @@
+node_modules/
+extension
+.vscode
+out/
+
+# Ignore VSIX files
+*.VSIX

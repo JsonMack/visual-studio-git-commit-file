@@ -1,0 +1,43 @@
+{
+  "name": "git-reference-to-txt",
+  "displayName": "GitReferenceToTxt",
+  "description": "Creates a txt file with the latest id as name and content.",
+  "version": "0.1.3",
+  "publisher": "jsonmack-nscc",
+  "repository": "https://github.com/JsonMack/git-reference-to-txt",
+  "engines": {
+    "vscode": "^1.50.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:gitReferenceToTxt.toFile",
+    "onUri"
+  ],
+  "main": "./out/gitReferenceToTxt.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "gitReferenceToTxt.toFile",
+        "title": "Git Reference to Text File"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "vsce:package": "vsce package"
+  },
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "@types/node": "^14.11.8",
+    "@types/vscode": "^1.50.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
+  },
+  "extensionDependencies": [
+    "vscode.git"
+  ]
+}
