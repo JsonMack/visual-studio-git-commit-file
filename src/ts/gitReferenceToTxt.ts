@@ -3,6 +3,7 @@ import * as vscode from 'vscode';
 import { GitExtension } from "./git";
 import * as fs from "fs";
 import * as os from "os";
+import { exception } from 'console';
 
 /**
  * Called when the extension is activated. This by default registers a command that can
@@ -12,21 +13,47 @@ import * as os from "os";
  * @param context The extensions vscode context.
  */
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerTextEditorCommand('gitReferenceToTxt.toFile', () => {
+    let disposable = vscode.commands.registerTextEditorCommand('gitReferenceToTxt.toFile', () => execute(context));
+
+    context.subscriptions.push(disposable);
+} 
+
+/**
+ * Finds the commit reference and attempts to create a text file at a user-defined location or 
+ * predefined location if necessary.
+ * 
+ * @param context The context for this extension.
+ */
+function execute(context: vscode.ExtensionContext) {
+    try {
         const config = vscode.workspace.getConfiguration('gitReferenceToTxt');
 
-        let configValueAbsolutePath = config.get<string>("folderAbsolutePath");
-
-        let configValueCleanUp = config.get<Boolean>("cleanUp")
-
+        let configValueAbsolutePath = config.get<string>('folderAbsolutePath');
+    
+        let configValueCleanUp = config.get<Boolean>('cleanUp')
+    
         let commitReference = findCommitReference(context);
-
+    
         let filePath = determinePath(configValueAbsolutePath, defaultFolderPath());
-
-        
-    })
-    context.subscriptions.push(disposable)
-} 
+    
+        let shortCommitReference = commitReference.substr(0, 6);
+    
+        try {
+            createFile(filePath, commitReference);
+        } catch (error) {
+            vscode.window.showErrorMessage(`A file already exists with the commit reference #${shortCommitReference}.`);
+            return;
+        }
+        vscode.window.showInformationMessage(`Created .txt file with commit reference #${shortCommitReference}.`);
+    } catch (e) {
+        if (e instanceof GitNotEnabled) {
+            vscode.window.showErrorMessage("Git is not enabled, cannot create commit file.");
+        } else if (e instanceof RepositoryCannotBeFound) {
+            vscode.window.showErrorMessage("Git repository cannot be found.");
+        }
+    }
+    
+}
 
 /**
  * Retrieves the GitExtension object that this extension depends on for finding
@@ -45,14 +72,12 @@ function findCommitReference(context: vscode.ExtensionContext): string {
     let gitExtension = getGitExtension();
 
     if (!gitExtension.enabled) {
-        vscode.window.showWarningMessage("Git extension is not enabled.");
-        return;
+        throw new GitNotEnabled();
     }
     let api = gitExtension.getAPI(1);
 
     if (api.repositories.length == 0) {
-        vscode.window.showInformationMessage("No repositories enabled.")
-        
+        throw new RepositoryCannotBeFound();
     }
     let repository = api.repositories[0];
 
@@ -100,5 +125,31 @@ function defaultFolderPath(): string {
  * @param commitReference the commit reference used as file name and content.
  */
 function createFile(folder: string, commitReference: string) {
-    fs.writeFileSync(join(folder, commitReference.concat(".txt")), commitReference);
+    let destination = join(folder, commitReference.concat(".txt"));
+
+    if (fs.existsSync(destination)) {
+        throw new FileAlreadyExistsError();
+    }
+    fs.writeFileSync(destination, commitReference);
+}
+
+/**
+ * A simple error that indicates the file already exists.
+ */
+class FileAlreadyExistsError extends Error {
+    
+}
+
+/**
+ * An error to represent that git is not enabled.
+ */
+class GitNotEnabled extends Error {
+
+}
+
+/**
+ * An error to represent that the git repository cannot be found.
+ */
+class RepositoryCannotBeFound extends Error {
+
 }
