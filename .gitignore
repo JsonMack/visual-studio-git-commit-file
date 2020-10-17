@@ -5,3 +5,7 @@ out/
 
 # Ignore VSIX files
 *.VSIX
+
+# Ignore git
+.git
+

@@ -3,5 +3,9 @@
         {
             "path": "."
         }
-    ]
+    ],
+    "settings": {
+        "gitReferenceToTxt.folderAbsolutePath": "",
+        "gitReferenceToTxt.credits": true
+    }
 }

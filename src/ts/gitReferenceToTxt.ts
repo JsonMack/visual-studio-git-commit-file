@@ -162,7 +162,7 @@ function defaultFolderPath(): string {
  * @param commitReference the commit reference used as file name and content.
  */
 function createFile(folder: string, commitReference: string, credits: boolean) {
-    let destination = join(folder, commitReference.concat(".txt"))
+    let destination = join(folder, commitReference.concat(EXPORT_FILE_TYPE))
 
     if (fs.existsSync(destination)) {
         throw new FileAlreadyExistsError()
