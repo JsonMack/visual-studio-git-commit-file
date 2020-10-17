@@ -13,7 +13,7 @@ import { exception } from 'console';
  * @param context The extensions vscode context.
  */
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerTextEditorCommand('gitReferenceToTxt.toFile', () => execute(context));
+    let disposable = vscode.commands.registerTextEditorCommand('git-reference-to-txt.create', () => execute(context));
 
     context.subscriptions.push(disposable);
 } 
@@ -26,11 +26,11 @@ export function activate(context: vscode.ExtensionContext) {
  */
 function execute(context: vscode.ExtensionContext) {
     try {
-        const config = vscode.workspace.getConfiguration('gitReferenceToTxt');
+        const config = vscode.workspace.getConfiguration();
 
-        let configValueAbsolutePath = config.get<string>('folderAbsolutePath');
+        let configValueAbsolutePath = config.get<string>('gitReferenceToTxt.folderAbsolutePath');
     
-        let configValueCleanUp = config.get<Boolean>('cleanUp')
+        let configValueCleanUp = config.get<Boolean>('gitReferenceToTxt.cleanUp')
     
         let commitReference = findCommitReference(context);
     
@@ -50,6 +50,8 @@ function execute(context: vscode.ExtensionContext) {
             vscode.window.showErrorMessage("Git is not enabled, cannot create commit file.");
         } else if (e instanceof RepositoryCannotBeFound) {
             vscode.window.showErrorMessage("Git repository cannot be found.");
+        } else {
+            vscode.window.showErrorMessage("Unexpected error: " + e);
         }
     }
     

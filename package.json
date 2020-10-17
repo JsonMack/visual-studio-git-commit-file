@@ -12,24 +12,24 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:gitReferenceToTxt.toFile"
+    "onCommand:git-reference-to-txt.create"
   ],
   "main": "./out/gitReferenceToTxt.js",
   "contributes": {
     "commands": [
       {
-        "command": "gitReferenceToTxt.toFile",
-        "title": "Git Reference to Text File"
+        "command": "git-reference-to-txt.create",
+        "title": "Git Reference To .txt File"
       }
     ],
-    "configuration":[
+    "configuration": [
       {
-        "title": "GitReferenceToTxt",
+        "title": "Git Reference To Txt Configuration",
         "properties": {
           "gitReferenceToTxt.folderAbsolutePath": {
             "type": "string",
             "default": "",
-            "description": "The folder that the TXT file will be created in. The default is %Desktop%."
+            "description": "The folder that the TXT file will be created in. The default is Desktop."
           },
           "gitReferenceToTxt.cleanUp": {
             "type": "boolean",
