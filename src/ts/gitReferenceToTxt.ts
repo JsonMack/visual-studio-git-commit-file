@@ -132,7 +132,9 @@ function createFile(folder: string, commitReference: string) {
     if (fs.existsSync(destination)) {
         throw new FileAlreadyExistsError();
     }
-    fs.writeFileSync(destination, commitReference);
+    let content = `${commitReference}\n\nCredits: git-reference-to-txt extension by Jason MacKeigan (w0270109)`
+
+    fs.writeFileSync(destination, content);
 }
 
 /**
