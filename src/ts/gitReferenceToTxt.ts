@@ -1,9 +1,10 @@
-import { join } from 'path';
-import * as vscode from 'vscode';
-import { GitExtension } from "./git";
-import * as fs from "fs";
-import * as os from "os";
-import { exception } from 'console';
+import { join } from 'path'
+import * as vscode from 'vscode'
+import { GitExtension } from "./git"
+import * as fs from "fs"
+import * as os from "os"
+
+const CREDITS: string = 'Credits: git-reference-to-txt extension by Jason MacKeigan (w0270109)';
 
 /**
  * Called when the extension is activated. This by default registers a command that can
@@ -13,9 +14,9 @@ import { exception } from 'console';
  * @param context The extensions vscode context.
  */
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerTextEditorCommand('git-reference-to-txt.create', () => execute(context));
+    let disposable = vscode.commands.registerTextEditorCommand('git-reference-to-txt.create', () => execute(context))
 
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(disposable)
 } 
 
 /**
@@ -26,32 +27,34 @@ export function activate(context: vscode.ExtensionContext) {
  */
 function execute(context: vscode.ExtensionContext) {
     try {
-        const config = vscode.workspace.getConfiguration();
+        const config = vscode.workspace.getConfiguration()
 
-        let configValueAbsolutePath = config.get<string>('gitReferenceToTxt.folderAbsolutePath');
+        let configValueAbsolutePath = config.get<string>('gitReferenceToTxt.folderAbsolutePath')
     
         let configValueCleanUp = config.get<Boolean>('gitReferenceToTxt.cleanUp')
+
+        let configValueCredits = config.get<Boolean>('getReferenceToTxt.credits')
     
-        let commitReference = findCommitReference(context);
+        let commitReference = findCommitReference(context)
     
-        let filePath = determinePath(configValueAbsolutePath, defaultFolderPath());
+        let filePath = determinePath(configValueAbsolutePath, defaultFolderPath())
     
-        let shortCommitReference = commitReference.substr(0, 6);
+        let shortCommitReference = commitReference.substr(0, 6)
     
         try {
-            createFile(filePath, commitReference);
+            createFile(filePath, commitReference)
         } catch (error) {
-            vscode.window.showErrorMessage(`A file already exists with the commit reference #${shortCommitReference}.`);
-            return;
+            vscode.window.showErrorMessage(`A file already exists with the commit reference #${shortCommitReference}.`)
+            return
         }
-        vscode.window.showInformationMessage(`Created .txt file with commit reference #${shortCommitReference}.`);
+        vscode.window.showInformationMessage(`Created .txt file with commit reference #${shortCommitReference}.`)
     } catch (e) {
         if (e instanceof GitNotEnabled) {
-            vscode.window.showErrorMessage("Git is not enabled, cannot create commit file.");
+            vscode.window.showErrorMessage("Git is not enabled, cannot create commit file.")
         } else if (e instanceof RepositoryCannotBeFound) {
-            vscode.window.showErrorMessage("Git repository cannot be found.");
+            vscode.window.showErrorMessage("Git repository cannot be found.")
         } else {
-            vscode.window.showErrorMessage("Unexpected error: " + e);
+            vscode.window.showErrorMessage("Unexpected error: " + e)
         }
     }
     
@@ -62,7 +65,7 @@ function execute(context: vscode.ExtensionContext) {
  * repository related information.
  */
 function getGitExtension(): GitExtension {
-    return vscode.extensions.getExtension<GitExtension>('vscode.git').exports;
+    return vscode.extensions.getExtension<GitExtension>('vscode.git').exports
 }
 
 /**
@@ -71,21 +74,21 @@ function getGitExtension(): GitExtension {
  * @param context The vscode context for this extension
  */
 function findCommitReference(context: vscode.ExtensionContext): string {
-    let gitExtension = getGitExtension();
+    let gitExtension = getGitExtension()
 
     if (!gitExtension.enabled) {
-        throw new GitNotEnabled();
+        throw new GitNotEnabled()
     }
-    let api = gitExtension.getAPI(1);
+    let api = gitExtension.getAPI(1)
 
     if (api.repositories.length == 0) {
-        throw new RepositoryCannotBeFound();
+        throw new RepositoryCannotBeFound()
     }
-    let repository = api.repositories[0];
+    let repository = api.repositories[0]
 
-    let head = repository.state.HEAD;
+    let head = repository.state.HEAD
     
-    return head.commit;
+    return head.commit
 }
 
 /**
@@ -97,12 +100,12 @@ function findCommitReference(context: vscode.ExtensionContext): string {
  */
 function determinePath(userDefined: string, defaultPath: string): string {
     if (userDefined.length == 0) {
-        return defaultPath;
+        return defaultPath
     }
     if (!fs.existsSync(userDefined)) {
-        return defaultPath;
+        return defaultPath
     }
-    return userDefined;
+    return userDefined
 }
 
 /**
@@ -110,14 +113,14 @@ function determinePath(userDefined: string, defaultPath: string): string {
  * desktop cannot be found.
  */
 function defaultFolderPath(): string {
-    let path = os.homedir();
+    let path = os.homedir()
 
     let desktopPath = join(path, 'Desktop')
     
     if (fs.existsSync(desktopPath)) {
-        return desktopPath;
+        return desktopPath
     }
-    return path;
+    return path
 }
 
 /**
@@ -126,15 +129,13 @@ function defaultFolderPath(): string {
  * @param folder the folder that the file is created in.
  * @param commitReference the commit reference used as file name and content.
  */
-function createFile(folder: string, commitReference: string) {
-    let destination = join(folder, commitReference.concat(".txt"));
+function createFile(folder: string, commitReference: string, credits: boolean) {
+    let destination = join(folder, commitReference.concat(".txt"))
 
     if (fs.existsSync(destination)) {
-        throw new FileAlreadyExistsError();
+        throw new FileAlreadyExistsError()
     }
-    let content = `${commitReference}\n\nCredits: git-reference-to-txt extension by Jason MacKeigan (w0270109)`
-
-    fs.writeFileSync(destination, content);
+    fs.writeFileSync(destination, credits ? `${commitReference}\n\n${CREDITS}` : commitReference)
 }
 
 /**
