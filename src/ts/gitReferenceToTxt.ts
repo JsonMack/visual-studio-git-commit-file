@@ -4,6 +4,9 @@ import { GitExtension } from "./git"
 import * as fs from "fs"
 import * as os from "os"
 
+/**
+ * A string of text that represents the credits displayed in the file.
+ */
 const CREDITS: string = 'Credits: git-reference-to-txt extension by Jason MacKeigan (w0270109)';
 
 /**
@@ -30,8 +33,6 @@ function execute(context: vscode.ExtensionContext) {
         const config = vscode.workspace.getConfiguration()
 
         let configValueAbsolutePath = config.get<string>('gitReferenceToTxt.folderAbsolutePath')
-    
-        let configValueCleanUp = config.get<boolean>('gitReferenceToTxt.cleanUp')
 
         let configValueCredits = config.get<boolean>('getReferenceToTxt.credits')
     

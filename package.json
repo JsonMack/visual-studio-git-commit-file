@@ -28,13 +28,8 @@
         "properties": {
           "gitReferenceToTxt.folderAbsolutePath": {
             "type": "string",
-            "default": "",
+            "default": ".",
             "description": "The folder that the .txt file will be created in. The default is Desktop."
-          },
-          "gitReferenceToTxt.cleanUp": {
-            "type": "boolean",
-            "default": false,
-            "description": "Makes an attempt to cleanup existing .txt files on the same path as the main folder."
           },
           "gitReferenceToTxt.credits": {
             "type": "boolean",
