@@ -31,9 +31,9 @@ function execute(context: vscode.ExtensionContext) {
 
         let configValueAbsolutePath = config.get<string>('gitReferenceToTxt.folderAbsolutePath')
     
-        let configValueCleanUp = config.get<Boolean>('gitReferenceToTxt.cleanUp')
+        let configValueCleanUp = config.get<boolean>('gitReferenceToTxt.cleanUp')
 
-        let configValueCredits = config.get<Boolean>('getReferenceToTxt.credits')
+        let configValueCredits = config.get<boolean>('getReferenceToTxt.credits')
     
         let commitReference = findCommitReference(context)
     
@@ -42,7 +42,7 @@ function execute(context: vscode.ExtensionContext) {
         let shortCommitReference = commitReference.substr(0, 6)
     
         try {
-            createFile(filePath, commitReference)
+            createFile(filePath, commitReference, configValueCredits)
         } catch (error) {
             vscode.window.showErrorMessage(`A file already exists with the commit reference #${shortCommitReference}.`)
             return
