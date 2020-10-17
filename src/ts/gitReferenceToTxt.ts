@@ -7,7 +7,38 @@ import * as os from "os"
 /**
  * A string of text that represents the credits displayed in the file.
  */
-const CREDITS: string = 'Credits: git-reference-to-txt extension by Jason MacKeigan (w0270109)';
+const CREDITS: string = 'Credits: git-reference-to-txt extension by Jason MacKeigan (w0270109)'
+
+/**
+ * The length of the commit reference that should be displayed to end-user.
+ */
+const SHORTENED_COMMIT_LENGTH: number = 8
+
+/**
+ * The git extension id used to interact with source control
+ */
+const GIT_EXTENSION_ID: string = 'vscode.git'
+
+/**
+ * The git extension api value, default is 1.
+ */
+const GIT_EXTENSION_API_VALUE = 1
+
+/**
+ * The location of the default repository used. This should be removed with something
+ * more intelligent in a later version.
+ */
+const DEFAULT_REPOSITORY_INDEX: number = 0
+
+/**
+ * The universal name of the desktop folder that the program defaults to if one is not provided.
+ */
+const DESKTOP_FOLDER_NAME: string = 'Desktop'
+
+/**
+ * The type of file that the commit reference is saved into.
+ */
+const EXPORT_FILE_TYPE: string = '.txt'
 
 /**
  * Called when the extension is activated. This by default registers a command that can
@@ -40,7 +71,7 @@ function execute(context: vscode.ExtensionContext) {
     
         let filePath = determinePath(configValueAbsolutePath, defaultFolderPath())
     
-        let shortCommitReference = commitReference.substr(0, 6)
+        let shortCommitReference = commitReference.substr(0, SHORTENED_COMMIT_LENGTH)
     
         try {
             createFile(filePath, commitReference, configValueCredits)
@@ -66,7 +97,7 @@ function execute(context: vscode.ExtensionContext) {
  * repository related information.
  */
 function getGitExtension(): GitExtension {
-    return vscode.extensions.getExtension<GitExtension>('vscode.git').exports
+    return vscode.extensions.getExtension<GitExtension>(GIT_EXTENSION_ID).exports
 }
 
 /**
@@ -80,12 +111,12 @@ function findCommitReference(context: vscode.ExtensionContext): string {
     if (!gitExtension.enabled) {
         throw new GitNotEnabled()
     }
-    let api = gitExtension.getAPI(1)
+    let api = gitExtension.getAPI(GIT_EXTENSION_API_VALUE)
 
     if (api.repositories.length == 0) {
         throw new RepositoryCannotBeFound()
     }
-    let repository = api.repositories[0]
+    let repository = api.repositories[DEFAULT_REPOSITORY_INDEX]
 
     let head = repository.state.HEAD
     
@@ -116,7 +147,7 @@ function determinePath(userDefined: string, defaultPath: string): string {
 function defaultFolderPath(): string {
     let path = os.homedir()
 
-    let desktopPath = join(path, 'Desktop')
+    let desktopPath = join(path, DESKTOP_FOLDER_NAME)
     
     if (fs.existsSync(desktopPath)) {
         return desktopPath
