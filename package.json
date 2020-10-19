@@ -2,7 +2,7 @@
   "name": "git-reference-to-txt",
   "displayName": "GitReferenceToTxt",
   "description": "Creates a txt file with the latest id as name and content.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "publisher": "jsonmack-nscc",
   "repository": "https://github.com/JsonMack/git-reference-to-txt",
   "engines": {
