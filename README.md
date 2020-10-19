@@ -1,6 +1,8 @@
 # Git Reference To Txt File
 ### A visual studio code extension that creates a .txt file with the last commit reference on the desktop or some user-defined path.
 
+[Visual Studio Code Extension](https://marketplace.visualstudio.com/items?itemName=jsonmack-nscc.git-reference-to-txt)
+
 # How to use
 There are effectively 2 ways to use this at the moment. 
 - You can either explicitly type the command using the command palette via (CTRL+SHIFT+P) on windows 
