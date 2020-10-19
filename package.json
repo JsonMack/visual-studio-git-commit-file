@@ -34,7 +34,7 @@
           },
           "gitReferenceToTxt.credits": {
             "type": "boolean",
-            "default": true,
+            "default": false,
             "description": "Appends some credits to the end of the .txt file."
           }
         }
