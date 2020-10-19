@@ -6,9 +6,9 @@ There are effectively 2 ways to use this at the moment. You can either explicitl
 and (CMD+SHIFT+P) on mac. The other, arguably easier way, is to simply click the button in the bottom left that shows a pound icon, arrow icon, and file
 icon grouped together (that's the best I can do okay).
 
-![CommanPalette](https://github.com/JsonMack/visual-studio-git-commit-file/images/command_palette.png)
+![CommanPalette](https://raw.githubusercontent.com/JsonMack/visual-studio-git-commit-file/master/images/command_palette.png)
 
-![StatusBarIcon](https://github.com/JsonMack/visual-studio-git-commit-file/images/status_bar_icon.png)
+![StatusBarIcon](https://raw.githubusercontent.com/JsonMack/visual-studio-git-commit-file/master/images/status_bar_icon.png)
 
 # User-defined settings
 You can update your .code-workspace file to modify the path that the .txt file is created in and remove credits (I mean, why would you though?).
