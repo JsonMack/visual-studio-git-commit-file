@@ -12,7 +12,8 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:git-reference-to-txt.create"
+    "onCommand:git-reference-to-txt.create",
+    "onStartupFinished"
   ],
   "main": "./out/gitReferenceToTxt.js",
   "contributes": {

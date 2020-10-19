@@ -1,6 +1,6 @@
 import { join } from 'path'
 import * as vscode from 'vscode'
-import { GitExtension } from "./git"
+import { GitExtension, Repository } from "./git"
 import * as fs from "fs"
 import * as os from "os"
 
@@ -48,10 +48,18 @@ const EXPORT_FILE_TYPE: string = '.txt'
  * @param context The extensions vscode context.
  */
 export function activate(context: vscode.ExtensionContext) {
-    let disposable = vscode.commands.registerTextEditorCommand('git-reference-to-txt.create', () => execute(context))
+    let disposable = vscode.commands.registerCommand('git-reference-to-txt.create', () => execute(context))
 
+    let statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left, 0)
+
+    statusBarItem.command = 'git-reference-to-txt.create'
+    statusBarItem.text = "$(symbol-number)$(arrow-right)$(file-text)"
+    statusBarItem.tooltip = "Create a .txt file from last commit reference."
+    statusBarItem.show()
+    
     context.subscriptions.push(disposable)
-} 
+    context.subscriptions.push(statusBarItem)
+}
 
 /**
  * Finds the commit reference and attempts to create a text file at a user-defined location or 
