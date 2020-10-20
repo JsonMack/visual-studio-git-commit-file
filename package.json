@@ -25,12 +25,12 @@
     ],
     "configuration": [
       {
-        "title": "Git Reference To Txt Configuration",
+        "title": "Git Reference To Txt",
         "properties": {
-          "gitReferenceToTxt.folderAbsolutePath": {
+          "gitReferenceToTxt.absoluteFolderPath": {
             "type": "string",
             "default": "",
-            "description": "The folder that the .txt file will be created in. The default path is Desktop or User directory."
+            "description": "The absolute path of the folder that the .txt file will be created in. The default path is Desktop or User directory."
           },
           "gitReferenceToTxt.credits": {
             "type": "boolean",

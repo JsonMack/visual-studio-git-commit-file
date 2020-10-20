@@ -69,18 +69,25 @@ export function activate(context: vscode.ExtensionContext) {
  */
 function execute(context: vscode.ExtensionContext) {
     try {
-        const config = vscode.workspace.getConfiguration()
+        const config = vscode.workspace.getConfiguration('gitReferenceToTxt')
 
-        let configValueAbsolutePath = config.get<string>('gitReferenceToTxt.folderAbsolutePath')
+        let configValueAbsolutePath = config.get<string>('absoluteFolderPath')
 
-        let configValueCredits = config.get<boolean>('getReferenceToTxt.credits')
-    
+        let configValueCredits = config.get<boolean>('credits')
+
+        console.log("json: " + JSON.stringify(config))
+
         let commitReference = findCommitReference(context)
+
+        console.log(`ref: ${commitReference}, configValuePath: ${configValueAbsolutePath}`)
     
         let filePath = determinePath(configValueAbsolutePath, defaultFolderPath())
     
+        console.log(`fp: ${filePath}`)
+        
         let shortCommitReference = commitReference.substr(0, SHORTENED_COMMIT_LENGTH)
-    
+
+        console.log(`${filePath}, ${shortCommitReference}, ${configValueAbsolutePath}, ${configValueCredits}`)
         try {
             createFile(filePath, commitReference, configValueCredits)
         } catch (error) {
