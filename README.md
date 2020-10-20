@@ -20,7 +20,7 @@ You can update your .code-workspace file to modify the path that the .txt file i
 
 ```json
     "settings": {
-        "gitReferenceToTxt.folderAbsolutePath": "C:/My/Custom/Path",
+        "gitReferenceToTxt.absoluteFolderPath": "C:/My/Custom/Path",
         "gitReferenceToTxt.credits": false
     }
 ```
